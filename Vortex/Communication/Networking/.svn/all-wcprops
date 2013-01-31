@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/vortex_mud/!svn/ver/5/trunk/Vortex/Vortex/Communication/Networking
+END
+ConnectionListener.cs
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/vortex_mud/!svn/ver/7/trunk/Vortex/Vortex/Communication/Networking/ConnectionListener.cs
+END
+PlayerSocket.cs
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/vortex_mud/!svn/ver/7/trunk/Vortex/Vortex/Communication/Networking/PlayerSocket.cs
+END

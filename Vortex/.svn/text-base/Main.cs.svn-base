@@ -1,0 +1,168 @@
+using System;
+using Vortex.IOOperations;
+using Vortex.Communication.Networking;
+using System.Threading;
+using Vortex.MUDStructures.Characters;
+using System.Collections.Generic;
+using System.Net.Sockets;
+using Vortex.Commands;
+using Vortex.MUDStructures.Rooms;
+
+namespace Vortex
+{
+	public static class MUDServer
+	{
+		public static Random rand = new Random();
+		public static bool Running = true;
+		public const int MillisecondsPerTick = 100;
+		public const int Port = 13371;
+		public static DateTime BootTime = DateTime.Now;
+
+		public static void Main(string[] args)
+		{
+			Console.WriteLine("Starting Vortex MUD Server");
+
+			// Load up game files
+			IOManager.InitilizeGameData();
+
+			// Show Commands
+			Console.WriteLine("Recognized commands are:");
+			foreach (var command in CommandHandler.GetValidCommands ()) {
+				Console.WriteLine("\t{0}", command);
+			}
+
+			string[] testStrings = {"nothing matches", "shutdown", "q", "qu", "ooc"};
+			foreach (var str in testStrings) {
+				var result = CommandHandler.GetMatchingCommand(str);
+				if (result != null) {
+					Console.WriteLine("[TEST] String \"{0}\" matched command \"{1}\"", str, result.GetCommandAttributes().Name);
+				} else {
+					Console.WriteLine("[TEST] String \"{0}\" failed to match any commands.", str);
+				}
+			}
+
+			// Start up the connection listener
+			ConnectionListener IncomingConnections = new ConnectionListener(MUDServer.Port);
+			IncomingConnections.StartListening();
+
+			Console.WriteLine("Vortex MUD ready to rock on port " + MUDServer.Port);
+
+			// enter main loop
+			Console.WriteLine("Entering main loop...");
+			while (MUDServer.Running) {
+				DateTime startTime = DateTime.Now;
+
+				// check for new connections
+				CheckForNewConnections(IncomingConnections);
+
+				// get player input
+				// run game update tic
+				ProcessTick();
+
+				// send output
+				SendOutput();
+
+				TimeSpan tickTime = DateTime.Now - startTime;
+				if (tickTime.TotalMilliseconds < MillisecondsPerTick) {
+					Thread.Sleep(MillisecondsPerTick - (int)tickTime.TotalMilliseconds);
+				} else {
+					Console.WriteLine(String.Format("[ALERT!!!] Tick took {0} ms to run (target is {1} ms)", tickTime.TotalMilliseconds, MillisecondsPerTick));
+				}
+			}
+			Console.WriteLine("Exiting main loop...");
+
+			IncomingConnections.StopListening();
+
+			Console.WriteLine("Vortex MUD server has terminated.  Press any key to continue.");
+			Console.ReadKey(true);
+		}
+
+		static void CheckForNewConnections(ConnectionListener IncomingConnections)
+		{
+			List<Socket> newConnections = IncomingConnections.AcceptConnections();
+			foreach (Socket sock in newConnections) {
+				PlayerCharacter newPlayer = new PlayerCharacter(new PlayerSocket(sock));
+
+				WriteToAllCharacters(String.Format("{0} has connected.\n\r", newPlayer.Name));
+
+				Character.AddCharacterToGame(newPlayer);
+
+				Room.GetRoom (1).AddCharacterToRoom(newPlayer);
+				CommandHandler.GetMatchingCommand ("look").Execute(newPlayer, "quiet");
+			}
+		}
+
+		static void ProcessTick()
+		{
+			LinkedListNode<Character> chNode = Character.CharacterList.First;
+			while (chNode != null) {
+				LinkedListNode<Character> nextChar = chNode.Next;
+				Character ch = chNode.Value;
+
+				if (ch is PlayerCharacter) {
+					ProcessPlayerCharacter(ch as PlayerCharacter);
+				}
+
+				chNode = nextChar;
+			}
+		}
+
+		static void ProcessPlayerCharacter(PlayerCharacter ch)
+		{
+			if (ch.HasInput) {
+				string input = ch.GetInput();
+				Console.WriteLine(String.Format("{0}: {1}", ch.Name, input));
+
+				int firstSpace = input.IndexOf(' ');
+				string commandString;
+				string parameterString;
+
+				if (firstSpace > 0) {
+					commandString = input.Substring(0, firstSpace);
+					parameterString = input.Substring(firstSpace + 1);
+				} else {
+					commandString = input;
+					parameterString = "";
+				}
+
+				Console.WriteLine ("{0} processed to: {1} : {2} :", ch.Name, commandString, parameterString);
+
+				BasicCommand command = CommandHandler.GetMatchingCommand(commandString);
+
+				if (command != null) {
+					command.Execute(ch, parameterString);
+				} else {
+					ch.SendToCharacter("Hugh?\n\r");
+				}
+
+				if (ch.GameState == PlayerGameState.LostConnection) {
+					Character.RemoveCharacterFromGame(ch);
+					WriteToAllCharacters(String.Format("[System] {0} has gone link-dead.\n\r", ch.Name));
+				}
+			}
+		}
+
+		static void SendOutput()
+		{
+			for (var node = Character.CharacterList.First; node != null; node = node.Next) {
+				if (node.Value is PlayerCharacter) {
+					PlayerCharacter ch = node.Value as PlayerCharacter;
+					if (ch.HasOutput) {
+						ch.SendToCharacter("\n\r{cprompt>{x\n\r");
+						ch.FlushOutput();
+					}
+				}
+			}
+		}
+
+		static void WriteToAllCharacters(string msg)
+		{
+			for (var ch = Character.CharacterList.First; ch != null; ch = ch.Next) {
+				if (ch.Value is PlayerCharacter) {
+					PlayerCharacter player = ch.Value as PlayerCharacter;
+					player.SendToCharacter(msg);
+				}
+			}
+		}
+	}
+}

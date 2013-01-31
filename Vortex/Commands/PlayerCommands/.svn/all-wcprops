@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/vortex_mud/!svn/ver/7/trunk/Vortex/Vortex/Commands/PlayerCommands
+END
+Say.cs
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/vortex_mud/!svn/ver/7/trunk/Vortex/Vortex/Commands/PlayerCommands/Say.cs
+END
+Ooc.cs
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/vortex_mud/!svn/ver/7/trunk/Vortex/Vortex/Commands/PlayerCommands/Ooc.cs
+END
+Quit.cs
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/vortex_mud/!svn/ver/7/trunk/Vortex/Vortex/Commands/PlayerCommands/Quit.cs
+END
+Look.cs
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/vortex_mud/!svn/ver/7/trunk/Vortex/Vortex/Commands/PlayerCommands/Look.cs
+END

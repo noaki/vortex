@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{96824359-6AFA-4608-BBA7-57865C77D3A1}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Vortex</RootNamespace>
+    <AssemblyName>Vortex</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>True</Externalconsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>True</Externalconsole>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Communication\ANSIColors.cs" />
+    <Compile Include="Communication\ColorString.cs" />
+    <Compile Include="IOOperations\IOManager.cs" />
+    <Compile Include="Communication\Networking\ConnectionListener.cs" />
+    <Compile Include="Communication\Networking\PlayerSocket.cs" />
+    <Compile Include="MUDStructures\Characters\PlayerCharacter.cs" />
+    <Compile Include="MUDStructures\Characters\Character.cs" />
+    <Compile Include="Commands\BasicCommand.cs" />
+    <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Commands\StaffCommands\Shutdown.cs" />
+    <Compile Include="Commands\PlayerCommands\Quit.cs" />
+    <Compile Include="Commands\PlayerCommands\Ooc.cs" />
+    <Compile Include="MUDStructures\Rooms\Room.cs" />
+    <Compile Include="Commands\PlayerCommands\Say.cs" />
+    <Compile Include="Commands\PlayerCommands\Look.cs" />
+    <Compile Include="MUDStructures\Exceptions\VnumInUseException.cs" />
+    <Compile Include="Commands\PlayerCommands\Who.cs" />
+    <Compile Include="MUDStructures\Rooms\RoomExit.cs" />
+    <Compile Include="MUDStructures\Objects\MudObject.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Communication\" />
+    <Folder Include="Commands\" />
+    <Folder Include="MUDStructures\" />
+    <Folder Include="Communication\Networking\" />
+    <Folder Include="IOOperations\" />
+    <Folder Include="MUDStructures\Characters\" />
+    <Folder Include="MUDStructures\Objects\" />
+    <Folder Include="MUDStructures\Rooms\" />
+    <Folder Include="Commands\PlayerCommands\" />
+    <Folder Include="Commands\StaffCommands\" />
+    <Folder Include="MUDStructures\Exceptions\" />
+  </ItemGroup>
+</Project>
