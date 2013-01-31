@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vortex", "Vortex\Vortex.csproj", "{96824359-6AFA-4608-BBA7-57865C77D3A1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{986C406C-34A5-4DA2-94CF-4EEF13A64E6B}"
+	ProjectSection(SolutionItems) = preProject
+		README = README
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,6 +18,8 @@ Global
 		{96824359-6AFA-4608-BBA7-57865C77D3A1}.Debug|x86.Build.0 = Debug|x86
 		{96824359-6AFA-4608-BBA7-57865C77D3A1}.Release|x86.ActiveCfg = Release|x86
 		{96824359-6AFA-4608-BBA7-57865C77D3A1}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Vortex\Vortex.csproj
